@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results skipped="0" failed="0" ignored="0" total="1" passed="1">
+  <reporter-output>
+  </reporter-output>
+  <suite name="Default suite" duration-ms="59837" started-at="2019-08-26T05:26:00Z" finished-at="2019-08-26T05:27:00Z">
+    <groups>
+    </groups>
+    <test name="Default test" duration-ms="59837" started-at="2019-08-26T05:26:00Z" finished-at="2019-08-26T05:27:00Z">
+      <class name="com.facebooklogin.FacebookLoginTest">
+        <test-method status="PASS" signature="setup()[pri:0, instance:com.facebooklogin.FacebookLoginTest@42d80b78]" name="setup" is-config="true" duration-ms="9071" started-at="2019-08-26T05:26:00Z" finished-at="2019-08-26T05:26:09Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setup -->
+        <test-method status="PASS" signature="facebookLoginTest()[pri:0, instance:com.facebooklogin.FacebookLoginTest@42d80b78]" name="facebookLoginTest" duration-ms="49797" started-at="2019-08-26T05:26:09Z" finished-at="2019-08-26T05:26:59Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- facebookLoginTest -->
+        <test-method status="PASS" signature="tearDown()[pri:0, instance:com.facebooklogin.FacebookLoginTest@42d80b78]" name="tearDown" is-config="true" duration-ms="940" started-at="2019-08-26T05:26:59Z" finished-at="2019-08-26T05:27:00Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+      </class> <!-- com.facebooklogin.FacebookLoginTest -->
+    </test> <!-- Default test -->
+  </suite> <!-- Default suite -->
+</testng-results>

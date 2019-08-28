@@ -33,7 +33,7 @@ public class FacebookLoginTest
 	
 	//method for executing setup process before executing test
 	@BeforeTest
-	public void setup()
+	public void setup() 
 	{
 		System.setProperty("webdriver.chrome.driver","D:\\QA-Testing\\chromedriver_win32\\chromedriver.exe");
 		Map<String, Object> prefs = new HashMap<String, Object>();
@@ -53,21 +53,26 @@ public class FacebookLoginTest
 		  String fileName="login_credentials.xlsx";
 		  String sheetName="Sheet1";
 		  String[][] data=readExcelData(filePath,fileName,sheetName);
-		  String[] result=new String[5];
-		  
+		  String[] actual_result=new String[5];
+		  String[] expected_result=new String[5];
+		  String[] test_result=new String[5];
 		  for(int i=0;i<data.length;i++)
 		  {
 			  String id="";
 			  String paswd="";
 			  for(int j=0;j<data[1].length;j++)
 			  {
-				  if(j!=data[1].length-1)
+				  if(j==0)
 				  {
 					  id=data[i][j];
 				  }
-				  else if(j==data[1].length-1)
+				  else if(j==data[1].length-2)
 				  {
 					  paswd=data[i][j];
+				  }
+				  else if(j==data[1].length-1)
+				  {
+					  expected_result[i]=data[i][j];
 				  }
 			  }
 			  wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"email\"]")));
@@ -82,8 +87,8 @@ public class FacebookLoginTest
 			  String expected_title="Facebook";
 			  if(actual_title.equalsIgnoreCase(expected_title))
 			  {
-				  System.out.println(id+"  "+paswd+"  "+"PASSED");
-				  result[i]="PASS";
+				  System.out.println(id+"  "+paswd+"  "+"LOGIN PASS");
+				  actual_result[i]="LOGIN PASS";
 				  WebElement logout_nav=driver.findElement(By.xpath("//*[@id=\"userNavigationLabel\"]"));
 				  logout_nav.click();
 				  Thread.sleep(3000);
@@ -92,13 +97,25 @@ public class FacebookLoginTest
 			  }
 			  else
 			  {
-				  System.out.println(id+"  "+paswd+"   "+"FAILED");
-				  result[i]="FAIL";
+				  System.out.println(id+"  "+paswd+"   "+"LOGIN FAIL");
+				  actual_result[i]="LOGIN FAIL";
 				  driver.get("https://www.facebook.com/");
 			  }
 		  }
 		  
-		  writeExcelData(filePath,fileName,sheetName,result);
+		  for(int i=0;i<actual_result.length;i++)
+		  {
+			  if(actual_result[i].equalsIgnoreCase(expected_result[i]))
+			  {
+				  test_result[i]="PASS";
+			  }
+			  else
+			  {
+				  test_result[i]="FAIL";
+			  }
+		  }
+		  
+		  writeExcelData(filePath,fileName,sheetName,actual_result,test_result);
 		  
 	 }
 	 
@@ -118,12 +135,11 @@ public class FacebookLoginTest
 		 Workbook workbook = new XSSFWorkbook(inputStream);
 		 Sheet sheet = workbook.getSheet(sheetName);
 		 int rowCount = sheet.getLastRowNum()-sheet.getFirstRowNum();
-		 String[][] data=new String[rowCount][2];
+		 String[][] data=new String[rowCount][3];
 		 for(int i=0;i<data.length;i++)
 		 {
 			 Row row = sheet.getRow(i+1);
-			 System.out.println(row);
-			 for(int j=0;j<2;j++)
+			 for(int j=0;j<3;j++)
 			 {
 				 if(row.getCell(j).getCellType()==CellType.NUMERIC)
 				 {
@@ -143,18 +159,20 @@ public class FacebookLoginTest
 	 }
 	 
 	 //method for writing result of test cases into excel sheet
-	 public void writeExcelData(String filePath,String fileName,String sheetName,String[] dataToWrite) throws IOException
+	 public void writeExcelData(String filePath,String fileName,String sheetName,String[] actualResultToWrite,String[] testResultToWrite) throws IOException
 	 {
 	    File file =    new File(filePath+"\\"+fileName);
         FileInputStream inputStream = new FileInputStream(file);
 		Workbook workbook = new XSSFWorkbook(inputStream);
 		Sheet sheet = workbook.getSheet(sheetName);
 		int rowCount = sheet.getLastRowNum()-sheet.getFirstRowNum();
-		for(int i=0;i<dataToWrite.length;i++)
+		for(int i=0;i<actualResultToWrite.length;i++)
 		 {
 			 Row row = sheet.getRow(i+1);
-		     Cell cell = row.createCell(2);
-		     cell.setCellValue(dataToWrite[i]);
+		     Cell cell = row.createCell(3);
+		     Cell cell1 = row.createCell(4);
+		     cell.setCellValue(actualResultToWrite[i]);
+		     cell1.setCellValue(testResultToWrite[i]);
 		 }
 		inputStream.close();
 		FileOutputStream outputStream = new FileOutputStream(file);

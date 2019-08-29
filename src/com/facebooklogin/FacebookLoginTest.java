@@ -23,14 +23,18 @@ import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.IndexedColors;
 
 
 public class FacebookLoginTest
 {
 	WebDriver driver;
 	WebDriverWait wait;
-	
+	Workbook workbook ;
+	CellStyle style;
 	//method for executing setup process before executing test
 	@BeforeTest
 	public void setup() 
@@ -89,6 +93,7 @@ public class FacebookLoginTest
 			  {
 				  System.out.println(id+"  "+paswd+"  "+"LOGIN PASS");
 				  actual_result[i]="LOGIN PASS";
+				  //wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\\\"userNavigationLabel\\")));
 				  WebElement logout_nav=driver.findElement(By.xpath("//*[@id=\"userNavigationLabel\"]"));
 				  logout_nav.click();
 				  Thread.sleep(3000);
@@ -132,7 +137,7 @@ public class FacebookLoginTest
 		 
 		 File file =    new File(filePath+fileName);
 		 FileInputStream inputStream = new FileInputStream(file);
-		 Workbook workbook = new XSSFWorkbook(inputStream);
+		 workbook = new XSSFWorkbook(inputStream);
 		 Sheet sheet = workbook.getSheet(sheetName);
 		 int rowCount = sheet.getLastRowNum()-sheet.getFirstRowNum();
 		 String[][] data=new String[rowCount][3];
@@ -173,6 +178,21 @@ public class FacebookLoginTest
 		     Cell cell1 = row.createCell(4);
 		     cell.setCellValue(actualResultToWrite[i]);
 		     cell1.setCellValue(testResultToWrite[i]);
+		     if(testResultToWrite[i]=="PASS")
+		     {
+		    	 style = workbook.createCellStyle();
+		    	 style.setFillForegroundColor(IndexedColors.BRIGHT_GREEN.getIndex());
+		    	 style.setFillPattern(FillPatternType.BIG_SPOTS);
+		    	 row.setRowStyle(style);
+		     }
+		     else if(testResultToWrite[i]=="FAIL")
+		     {
+		    	 style = workbook.createCellStyle();
+		    	 style.setFillBackgroundColor(IndexedColors.RED.getIndex());
+		    	 style.setFillPattern(FillPatternType.BIG_SPOTS);
+		    	 row.setRowStyle(style);
+		     }
+		     
 		 }
 		inputStream.close();
 		FileOutputStream outputStream = new FileOutputStream(file);

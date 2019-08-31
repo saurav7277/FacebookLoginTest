@@ -28,7 +28,6 @@ import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.IndexedColors;
 
-
 public class FacebookLoginTest
 {
 	WebDriver driver;
